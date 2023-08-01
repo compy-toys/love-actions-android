@@ -237,9 +237,8 @@ runs:
     - name: Check results
       shell: bash
       run: |
-        grep namespace ./love-actions-android/love-android/app/build.gradle
         grep 'app.name' ./love-actions-android/love-android/gradle.properties
-        grep 'android:label' ./love-actions-android/love-android/app/src/main/AndroidManifest.xml
+        find . -name SDLActivity.java
     - name: Delete offending line
       shell: bash
       run: |
