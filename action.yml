@@ -110,6 +110,11 @@ inputs:
       Would be used to sign the app
       Usually the same as keystore-key-password
     required: false
+  no-soft-keyboard:
+    description: |
+      Whether to deploy workaround for devices with a physical keyboard
+    default: ""
+    required: false
 outputs:
   package-paths:
     description: |
@@ -235,6 +240,12 @@ runs:
         grep namespace ./love-actions-android/love-android/app/build.gradle
         grep 'app.name' ./love-actions-android/love-android/gradle.properties
         grep 'android:label' ./love-actions-android/love-android/app/src/main/AndroidManifest.xml
+    - name: Delete offending line
+      shell: bash
+      run: |
+        [ -z '${{ inputs.no-soft-keyboard }}' ] && \
+        sed -i -e '/mTextEdit.requestFocus();/ d' \
+          love/src/jni/SDL2/android-project/app/src/main/java/org/libsdl/app/SDLActivity.java
 
     - name: Cache gradle
       uses: actions/cache@v3
