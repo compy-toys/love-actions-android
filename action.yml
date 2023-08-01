@@ -243,9 +243,10 @@ runs:
     - name: Delete offending line
       shell: bash
       run: |
-        [ -z '${{ inputs.no-soft-keyboard }}' ] && \
-        sed -i -e '/mTextEdit.requestFocus();/ d' \
-          love/src/jni/SDL2/android-project/app/src/main/java/org/libsdl/app/SDLActivity.java
+        [ -n '${{ inputs.no-soft-keyboard }}' ] && \
+          sed -i -e '/mTextEdit.requestFocus();/ d' \
+            love/src/jni/SDL2/android-project/app/src/main/java/org/libsdl/app/SDLActivity.java \
+         || true
     - name: die
       shell: bash
       run: "false"
