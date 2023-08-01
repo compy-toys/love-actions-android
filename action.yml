@@ -234,20 +234,13 @@ runs:
           file.seek(0)
           file.truncate()
           file.write(data)
-    - name: Check results
-      shell: bash
-      run: |
-        grep 'app.name' ./love-actions-android/love-android/gradle.properties
-        find . -name SDLActivity.java
     - name: Delete offending line
       shell: bash
       run: |
-        [ -z '${{ inputs.no-soft-keyboard }}' ] && \
-        sed -i -e '/mTextEdit.requestFocus();/ d' \
-          love/src/jni/SDL2/android-project/app/src/main/java/org/libsdl/app/SDLActivity.java
-    - name: die
-      shell: bash
-      run: "false"
+        [ -n '${{ inputs.no-soft-keyboard }}' ] && \
+          sed -i -e '/mTextEdit.requestFocus();/ d' \
+            ./love-actions-android/love-android/love/src/jni/SDL2/android-project/app/src/main/java/org/libsdl/app/SDLActivity.java \
+         || true
 
     - name: Cache gradle
       uses: actions/cache@v3
