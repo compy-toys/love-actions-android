@@ -229,6 +229,13 @@ runs:
           file.seek(0)
           file.truncate()
           file.write(data)
+    - name: Check results
+      shell: bash
+      run: |
+        grep namespace ./love-actions-android/love-android/app/build.gradle
+        grep 'app.name' ./love-actions-android/love-android/gradle.properties
+        grep 'android:label' ./love-actions-android/love-android/app/src/main/AndroidManifest.xml
+
     - name: Cache gradle
       uses: actions/cache@v3
       with:
