@@ -166,6 +166,8 @@ runs:
     - name: Update android information
       shell: python
       run: |
+        import re
+
         with open("./love-actions-android/love-android/app/src/main/AndroidManifest.xml", "r+", encoding="utf-8") as file:
           data = file.read()
           data = data\
@@ -189,6 +191,16 @@ runs:
           file.seek(0)
           file.truncate()
           file.write(data)
+
+        with open("./love-actions-android/love-android/gradle.properties", "r+", encoding="utf-8") as file:
+          codepoints = ','.join([str(b) for b in bytearray("${{ inputs.app-name }}", "utf-8")])
+          data = file.read()
+          data = re.sub("app.name=.*$", f"app.name_byte_array=${codepoints}", data)
+          file.seek(0)
+          file.truncate()
+          file.write(data)
+
+
         with open("./love-actions-android/love-android/app/build.gradle", "r+", encoding="utf-8") as file:
           data = file.read()
           data = data\
