@@ -175,7 +175,7 @@ runs:
 
         with open("./love-actions-android/love-android/app/src/main/AndroidManifest.xml", "r+", encoding="utf-8") as file:
           data = file.read()
-          data = data.replace("LÖVE for Android", "${{ inputs.app-name }}")\
+          data = data.replace("LÖVE for Android", "${{ inputs.app-name }}")
           data = re.sub("@drawable/\w+", "${{ inputs.icon-specifier }}", data)
           try:
             scheme = "${{ inputs.custom-scheme }}".split("://")[0]
