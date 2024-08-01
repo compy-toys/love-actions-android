@@ -140,7 +140,7 @@ runs:
       with:
         path: ./love-actions-android/love-android
         ref: ${{ inputs.love-ref }}
-        repository: aldum/love-android
+        repository: compy-toys/love-android
         submodules: recursive
     - name: Apply love-android patch
       if: "${{ inputs.love-patch != '' }}"
