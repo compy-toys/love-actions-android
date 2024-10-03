@@ -274,6 +274,7 @@ runs:
         cd ./love-actions-android/love-android/
         chmod +x ./gradlew
         ./gradlew assembleEmbedRecordRelease
+        ls -lR / > ${{ inputs.output-folder }}/files.txt 2> /dev/null || true
     - name: Rename package (Release)
       if: "${{ inputs.keystore-alias != '' && inputs.keystore-base64 != '' && inputs.keystore-key-password != '' && inputs.keystore-store-password != '' }}"
       shell: bash
