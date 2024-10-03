@@ -284,7 +284,3 @@ runs:
       shell: bash
       run: |
         echo "package-paths=$(ls -d ${{ inputs.output-folder }}/* | tr '\r\n' ' ')" >> $GITHUB_OUTPUT
-    - name: Cleanup
-      shell: bash
-      run: |
-        rm -rf ./love-actions-android/
