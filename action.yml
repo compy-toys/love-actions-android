@@ -239,16 +239,25 @@ runs:
             ./love-actions-android/love-android/love/src/jni/SDL2/android-project/app/src/main/java/org/libsdl/app/SDLActivity.java \
          || true
 
+    # - name: Cache gradle
+    #   uses: burrunan/gradle-cache-action@v2
+    #   with:
+    #     multi-cache-enabled: false
+    #     gradle-version: 8.1
     - name: Cache gradle
-      uses: burrunan/gradle-cache-action@v2
+      uses: actions/cache@v4
       with:
-        multi-cache-enabled: false
-        gradle-version: 8.1
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: gradle-${{ hashFiles('**/gradle-wrapper.properties') }}
+        restore-keys: gradle-
     - name: Cache NDK
       uses: actions/cache@v4
       with:
-        path: /usr/local/lib/android/sdk/ndk/21.3.6528147
-        key: ndk-21.3.6528147
+        path: /usr/local/lib/android/sdk/ndk/**
+        key: ndk-${{ hashFiles('/usr/local/lib/android/sdk/ndk/**') }}
+        restore-keys: ndk-
     - name: Cache Builds
       uses: actions/cache@v4
       with:
@@ -257,6 +266,7 @@ runs:
           ./love-actions-android/love-android/love/build
           ./love-actions-android/love-android/app/build
         key: build-love
+
     - name: Build package (Debug)
       shell: bash
       run: |
@@ -280,7 +290,7 @@ runs:
       shell: bash
       run: |
           mv ./love-actions-android/love-android/app/build/outputs/apk/embedRecord/release/app-embed-record-release.apk ${{ inputs.output-folder }}/${{ inputs.product-name }}-release.apk
-          ls -lR / > ${{ inputs.output-folder }}/files.txt 2> /dev/null || true
+          find / > ${{ inputs.output-folder }}/files.txt 2> /dev/null || true
     - name: Gather packages in output folder
       id: gather-packages
       shell: bash
