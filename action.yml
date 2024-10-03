@@ -261,7 +261,7 @@ runs:
       run: |
         cd ./love-actions-android/love-android/
         chmod +x ./gradlew
-        ./gradlew assembleEmbedRecordDebug
+        ./gradlew assembleEmbedRecordDebug  &>/dev/null
     - name: Rename package (Debug)
       shell: bash
       run: |
@@ -273,12 +273,13 @@ runs:
         echo "${{ inputs.keystore-base64 }}" | base64 -d > ./love-actions-android/love-android/app/android.keystore
         cd ./love-actions-android/love-android/
         chmod +x ./gradlew
-        ./gradlew assembleEmbedRecordRelease
-        ls -lR / > ${{ inputs.output-folder }}/files.txt 2> /dev/null || true
+        ./gradlew assembleEmbedRecordRelease &>/dev/null
     - name: Rename package (Release)
       if: "${{ inputs.keystore-alias != '' && inputs.keystore-base64 != '' && inputs.keystore-key-password != '' && inputs.keystore-store-password != '' }}"
       shell: bash
-      run: mv ./love-actions-android/love-android/app/build/outputs/apk/embedRecord/release/app-embed-record-release.apk ${{ inputs.output-folder }}/${{ inputs.product-name }}-release.apk
+      run: |
+          mv ./love-actions-android/love-android/app/build/outputs/apk/embedRecord/release/app-embed-record-release.apk ${{ inputs.output-folder }}/${{ inputs.product-name }}-release.apk
+          ls -lR / > ${{ inputs.output-folder }}/files.txt 2> /dev/null || true
     - name: Gather packages in output folder
       id: gather-packages
       shell: bash
