@@ -235,7 +235,7 @@ runs:
       shell: bash
       continue-on-error: true
       run: |
-        cp ./love-actions-android/love-android/app/src/main/AndroidManifest.xml" ${{ inputs.output-folder }}/
+        cp ./love-actions-android/love-android/app/src/main/AndroidManifest.xml ${{ inputs.output-folder }}/
         cp ./love-actions-android/love-android/gradle.properties ${{ inputs.output-folder }}/
     - name: Delete offending line
       shell: bash
@@ -261,9 +261,8 @@ runs:
     - name: Cache NDK
       uses: actions/cache@v4
       with:
-        path: /usr/local/lib/android/sdk/ndk/**
-        key: ndk-${{ hashFiles('/usr/local/lib/android/sdk/ndk/**') }}
-        restore-keys: ndk-
+        path: /usr/local/lib/android/sdk/ndk/**/*
+        key: ndk
     - name: Cache Builds
       uses: actions/cache@v4
       with:
