@@ -255,7 +255,7 @@ runs:
           ./love-actions-android/love-android/.gradle
           ./love-actions-android/love-android/love/build
           ./love-actions-android/love-android/app/build
-        key: build-love-11.4
+        key: build-love
     - name: Build package (Debug)
       shell: bash
       run: |
