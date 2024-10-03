@@ -262,7 +262,7 @@ runs:
       run: |
         cd ./love-actions-android/love-android/
         chmod +x ./gradlew
-        ./gradlew assembleEmbedRecordDebug 2>&1 | ( LPD=100 ; lc=0 ; while IFS= read -r ; do ((lc++)) ; (( lc % LPD == 0 )) && echo -n "."; done ; echo "" )
+        ./gradlew assembleEmbedRecordDebug &> /dev/null
     - name: Rename package (Debug)
       shell: bash
       run: |
@@ -274,7 +274,7 @@ runs:
         echo "${{ inputs.keystore-base64 }}" | base64 -d > ./love-actions-android/love-android/app/android.keystore
         cd ./love-actions-android/love-android/
         chmod +x ./gradlew
-        ./gradlew assembleEmbedRecordRelease 2>&1 | ( LPD=100 ; lc=0 ; while IFS= read -r ; do ((lc++)) ; (( lc % LPD == 0 )) && echo -n "."; done ; echo "" )
+        ./gradlew assembleEmbedRecordRelease &> /dev/null
     - name: Rename package (Release)
       if: "${{ inputs.keystore-alias != '' && inputs.keystore-base64 != '' && inputs.keystore-key-password != '' && inputs.keystore-store-password != '' }}"
       shell: bash
@@ -286,3 +286,7 @@ runs:
       shell: bash
       run: |
         echo "package-paths=$(ls -d ${{ inputs.output-folder }}/* | tr '\r\n' ' ')" >> $GITHUB_OUTPUT
+    - name: test
+      shell: bash
+      continue-on-error: true
+      run: dd if=/dev/urandom count=1024 2>&1 | ( LPD=100 ; lc=0 ; while IFS= read -r ; do ((lc++)) ; (( lc % LPD == 0 )) && echo -n "."; done ; echo "" )
