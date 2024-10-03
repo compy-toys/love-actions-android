@@ -243,6 +243,7 @@ runs:
       uses: burrunan/gradle-cache-action@v2
       with:
         multi-cache-enabled: false
+        gradle-version: 8.1
     - name: Cache NDK
       uses: actions/cache@v4
       with:
