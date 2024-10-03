@@ -231,6 +231,13 @@ runs:
           file.seek(0)
           file.truncate()
           file.write(data)
+    - name: check our work
+      shell: bash
+      run: |
+        cat ./love-actions-android/love-android/app/src/main/AndroidManifest.xml"
+        echo '-------------------------'
+        cat ./love-actions-android/love-android/gradle.properties
+        echo '-------------------------'
     - name: Delete offending line
       shell: bash
       run: |
