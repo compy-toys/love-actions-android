@@ -240,13 +240,9 @@ runs:
          || true
 
     - name: Cache gradle
-      uses: actions/cache@v4
+      uses: burrunan/gradle-cache-action@v2
       with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: gradle-${{ hashFiles('**/gradle-wrapper.properties') }}
-        restore-keys: gradle-
+        multi-cache-enabled: false
     - name: Cache NDK
       uses: actions/cache@v4
       with:
