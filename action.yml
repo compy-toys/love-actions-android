@@ -233,11 +233,10 @@ runs:
           file.write(data)
     - name: check our work
       shell: bash
+      continue-on-error: true
       run: |
-        cat ./love-actions-android/love-android/app/src/main/AndroidManifest.xml"
-        echo '-------------------------'
-        cat ./love-actions-android/love-android/gradle.properties
-        echo '-------------------------'
+        cp ./love-actions-android/love-android/app/src/main/AndroidManifest.xml" ${{ inputs.output-folder }}/
+        cp ./love-actions-android/love-android/gradle.properties ${{ inputs.output-folder }}/
     - name: Delete offending line
       shell: bash
       run: |
@@ -303,7 +302,3 @@ runs:
       shell: bash
       run: |
         echo "package-paths=$(ls -d ${{ inputs.output-folder }}/* | tr '\r\n' ' ')" >> $GITHUB_OUTPUT
-    - name: test
-      shell: bash
-      continue-on-error: true
-      run: dd if=/dev/urandom count=1024 2>&1 | ( LPD=100 ; lc=0 ; while IFS= read -r ; do ((lc++)) ; (( lc % LPD == 0 )) && echo -n "."; done ; echo "" )
