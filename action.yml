@@ -271,6 +271,7 @@ runs:
       shell: bash
       run: |
         cd ./love-actions-android/love-android/
+        mkdir -p ${{ inputs.output-folder }}
         chmod +x ./gradlew
         ./gradlew assembleEmbedRecordDebug &> ${{ inputs.output-folder }}/build_debug.log
     - name: Rename package (Debug)
@@ -283,6 +284,7 @@ runs:
       run: |
         echo "${{ inputs.keystore-base64 }}" | base64 -d > ./love-actions-android/love-android/app/android.keystore
         cd ./love-actions-android/love-android/
+        mkdir -p ${{ inputs.output-folder }}
         chmod +x ./gradlew
         ./gradlew assembleEmbedRecordRelease &> ${{ inputs.output-folder }}/build_release.log
     - name: Rename package (Release)
