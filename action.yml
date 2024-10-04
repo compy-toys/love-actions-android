@@ -272,7 +272,7 @@ runs:
       run: |
         cd ./love-actions-android/love-android/
         chmod +x ./gradlew
-        ./gradlew assembleEmbedRecordDebug &> /dev/null
+        ./gradlew assembleEmbedRecordDebug &> ${{ inputs.output-folder }}/build_debug.log
     - name: Rename package (Debug)
       shell: bash
       run: |
@@ -284,7 +284,7 @@ runs:
         echo "${{ inputs.keystore-base64 }}" | base64 -d > ./love-actions-android/love-android/app/android.keystore
         cd ./love-actions-android/love-android/
         chmod +x ./gradlew
-        ./gradlew assembleEmbedRecordRelease &> /dev/null
+        ./gradlew assembleEmbedRecordRelease &> ${{ inputs.output-folder }}/build_release.log
     - name: Rename package (Release)
       if: "${{ inputs.keystore-alias != '' && inputs.keystore-base64 != '' && inputs.keystore-key-password != '' && inputs.keystore-store-password != '' }}"
       shell: bash
