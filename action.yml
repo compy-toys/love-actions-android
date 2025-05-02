@@ -259,17 +259,18 @@ runs:
           ./love-actions-android/love-android/.gradle
           ./love-actions-android/love-android/love/build
           ./love-actions-android/love-android/app/build
-        key: build-love-11.4
+        key: build-android-${{ inputs.love-ref }}
     - name: Build package (Debug)
       shell: bash
       run: |
         cd ./love-actions-android/love-android/
         chmod +x ./gradlew
-        ./gradlew assembleEmbedRecordDebug
+        ./gradlew assembleDebug
     - name: Rename package (Debug)
       shell: bash
       run: |
-        mv ./love-actions-android/love-android/app/build/outputs/apk/embedRecord/debug/app-embed-record-debug.apk ${{ inputs.output-folder }}/${{ inputs.product-name }}-debug.apk
+        mv ./love-actions-android/love-android/app/build/outputs/apk/embedPlayer/debug/app-embed-player-debug.apk ${{ inputs.output-folder }}/${{ inputs.product-name }}-player-debug.apk
+        mv ./love-actions-android/love-android/app/build/outputs/apk/embedIDE/debug/app-embed-IDE-debug.apk ${{ inputs.output-folder }}/${{ inputs.product-name }}-IDE-debug.apk
     - name: Build package (Release)
       if: "${{ inputs.keystore-alias != '' && inputs.keystore-base64 != '' && inputs.keystore-key-password != '' && inputs.keystore-store-password != '' }}"
       shell: bash
@@ -277,11 +278,14 @@ runs:
         echo "${{ inputs.keystore-base64 }}" | base64 -d > ./love-actions-android/love-android/app/android.keystore
         cd ./love-actions-android/love-android/
         chmod +x ./gradlew
-        ./gradlew assembleEmbedRecordRelease
+        ./gradlew assembleRelease
     - name: Rename package (Release)
       if: "${{ inputs.keystore-alias != '' && inputs.keystore-base64 != '' && inputs.keystore-key-password != '' && inputs.keystore-store-password != '' }}"
       shell: bash
-      run: mv ./love-actions-android/love-android/app/build/outputs/apk/embedRecord/release/app-embed-record-release.apk ${{ inputs.output-folder }}/${{ inputs.product-name }}-release.apk
+      run: |
+        mv ./love-actions-android/love-android/app/build/outputs/apk/embedPlayer/release/app-embed-player-debug.apk ${{ inputs.output-folder }}/${{ inputs.product-name }}-player-release.apk
+        mv ./love-actions-android/love-android/app/build/outputs/apk/embedIDE/release/app-embed-IDE-debug.apk ${{ inputs.output-folder }}/${{ inputs.product-name }}-IDE-release.apk
+      continue-on-error: true
     - name: Gather packages in output folder
       id: gather-packages
       shell: bash
