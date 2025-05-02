@@ -173,42 +173,8 @@ runs:
       run: |
         import re
 
-        with open("./love-actions-android/love-android/app/src/main/AndroidManifest.xml", "r+", encoding="utf-8") as file:
-          data = file.read()
-          data = data.replace("LÖVE for Android", "${{ inputs.app-name }}")
-          data = re.sub("@drawable/\w+", "${{ inputs.icon-specifier }}", data)
-          try:
-            scheme = "${{ inputs.custom-scheme }}".split("://")[0]
-            host = "${{ inputs.custom-scheme }}".split("://")[1]
-            if scheme != "" and host != "":
-              data = data[:data.rfind("</intent-filter>") + 16] + '''
-                    <intent-filter>
-                      <action android:name="android.intent.action.VIEW" />
-                      <category android:name="android.intent.category.DEFAULT" />
-                      <category android:name="android.intent.category.BROWSABLE" />
-                      <data android:scheme="''' + scheme + '''" android:host="''' + host + '''" />
-                    </intent-filter>''' + data[data.rfind("</intent-filter>") + 16:]
-          except:
-            pass
-          file.seek(0)
-          file.truncate()
-          file.write(data)
-
-        with open("./love-actions-android/love-android/gradle.properties", "r+", encoding="utf-8") as file:
-          codepoints = ','.join([str(b) for b in bytearray("${{ inputs.app-name }}", "utf-8")])
-          data = file.read()
-          data = re.sub("app.name_byte_array=.*", f"app.name_byte_array={codepoints}", data)
-          file.seek(0)
-          file.truncate()
-          file.write(data)
-
-
         with open("./love-actions-android/love-android/app/build.gradle", "r+", encoding="utf-8") as file:
           data = file.read()
-          data = data\
-            .replace("org.love2d.android", "${{ inputs.bundle-id }}")\
-            .replace("30", "${{ inputs.version-code }}")\
-            .replace("11.4", "${{ inputs.version-string }}")
           insert_pos = data.find("\n", data.find("proguardFiles")) + 1
           data = data[:insert_pos] + "            signingConfig signingConfigs.release\n" + data[insert_pos:]
           insert_pos = data.find("buildTypes") - 4
@@ -260,18 +226,18 @@ runs:
           ./love-actions-android/love-android/love/build
           ./love-actions-android/love-android/app/build
         key: build-android-${{ inputs.love-ref }}
-    - name: Build package (Debug)
+    - name: Build packages (Debug)
       shell: bash
       run: |
         cd ./love-actions-android/love-android/
         chmod +x ./gradlew
         ./gradlew assembleDebug
-    - name: Rename package (Debug)
+    - name: Rename packages (Debug)
       shell: bash
       run: |
         mv ./love-actions-android/love-android/app/build/outputs/apk/embedPlayer/debug/app-embed-player-debug.apk ${{ inputs.output-folder }}/${{ inputs.product-name }}-player-debug.apk
         mv ./love-actions-android/love-android/app/build/outputs/apk/embedIDE/debug/app-embed-IDE-debug.apk ${{ inputs.output-folder }}/${{ inputs.product-name }}-IDE-debug.apk
-    - name: Build package (Release)
+    - name: Build packages (Release)
       if: "${{ inputs.keystore-alias != '' && inputs.keystore-base64 != '' && inputs.keystore-key-password != '' && inputs.keystore-store-password != '' }}"
       shell: bash
       run: |
@@ -279,7 +245,7 @@ runs:
         cd ./love-actions-android/love-android/
         chmod +x ./gradlew
         ./gradlew assembleRelease
-    - name: Rename package (Release)
+    - name: Rename packages (Release)
       if: "${{ inputs.keystore-alias != '' && inputs.keystore-base64 != '' && inputs.keystore-key-password != '' && inputs.keystore-store-password != '' }}"
       shell: bash
       run: |
