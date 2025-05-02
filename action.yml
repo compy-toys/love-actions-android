@@ -245,12 +245,13 @@ runs:
         cd ./love-actions-android/love-android/
         chmod +x ./gradlew
         ./gradlew assembleRelease
+        ls -lhR app/build/outputs/apk
     - name: Rename packages (Release)
       if: "${{ inputs.keystore-alias != '' && inputs.keystore-base64 != '' && inputs.keystore-key-password != '' && inputs.keystore-store-password != '' }}"
       shell: bash
       run: |
-        mv ./love-actions-android/love-android/app/build/outputs/apk/embedPlayer/release/app-embed-player-debug.apk ${{ inputs.output-folder }}/${{ inputs.product-name }}-player-release.apk
-        mv ./love-actions-android/love-android/app/build/outputs/apk/embedIDE/release/app-embed-IDE-debug.apk ${{ inputs.output-folder }}/${{ inputs.product-name }}-IDE-release.apk
+        mv ./love-actions-android/love-android/app/build/outputs/apk/embedPlayer/release/app-embed-player-release.apk ${{ inputs.output-folder }}/${{ inputs.product-name }}-player-release.apk
+        mv ./love-actions-android/love-android/app/build/outputs/apk/embedIDE/release/app-embed-IDE-release.apk ${{ inputs.output-folder }}/${{ inputs.product-name }}-IDE-release.apk
       continue-on-error: true
     - name: Gather packages in output folder
       id: gather-packages
