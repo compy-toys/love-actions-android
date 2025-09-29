@@ -197,13 +197,13 @@ runs:
           file.seek(0)
           file.truncate()
           file.write(data)
-    - name: Delete offending line
-      shell: bash
-      run: |
-        [ -n '${{ inputs.no-soft-keyboard }}' ] && \
-          sed -i -e '/mTextEdit.requestFocus();/ d' \
-            ./love-actions-android/love-android/love/src/jni/SDL2/android-project/app/src/main/java/org/libsdl/app/SDLActivity.java \
-         || true
+    # - name: Delete offending line
+    #   shell: bash
+    #   run: |
+    #     [ -n '${{ inputs.no-soft-keyboard }}' ] && \
+    #       sed -i -e '/mTextEdit.requestFocus();/ d' \
+    #         ./love-actions-android/love-android/love/src/jni/SDL2/android-project/app/src/main/java/org/libsdl/app/SDLActivity.java \
+    #      || true
 
     - name: Cache gradle
       uses: actions/cache@v4
@@ -216,15 +216,17 @@ runs:
     - name: Cache NDK
       uses: actions/cache@v4
       with:
-        path: /usr/local/lib/android/sdk/ndk/21.3.6528147
-        key: ndk-21.3.6528147
+        path: /usr/local/lib/android/sdk/ndk
+        key: ndk-${{ hashFiles('/usr/local/lib/android/sdk/ndk/*/source.properties') }}
+        restore-keys: ndk-
     - name: Cache Builds
       uses: actions/cache@v4
       with:
         path: |
           ./love-actions-android/love-android/.gradle
-          ./love-actions-android/love-android/love/build
           ./love-actions-android/love-android/app/build
+          ./love-actions-android/love-android/love/build
+          ./love-actions-android/love-android/love/src/jni/SDL2/android-project/app/build
         key: build-android-${{ inputs.love-ref }}
     - name: Build packages (Debug)
       shell: bash
