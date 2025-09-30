@@ -230,8 +230,15 @@ runs:
           ./love-actions-android/love-android/.gradle
           ./love-actions-android/love-android/app/build
           ./love-actions-android/love-android/love/build
-          ./love-actions-android/love-android/love/src/jni/SDL2/android-project/app/build
         key: build-android-${{ inputs.love-ref }}
+        restore-keys: build-android-
+    - name: Cache Builds
+      uses: actions/cache@v4
+      with:
+        path: |
+          ./love-actions-android/love-android/love/src/jni/SDL2/android-project/app/build
+        key: build-android-SDL-${{ inputs.love-ref }}
+        restore-keys: build-android-SDL-
     - name: Build packages (Debug)
       shell: bash
       run: |
